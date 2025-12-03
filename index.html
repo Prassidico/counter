@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conto alla Rovescia Prossimo Martedì alle 21:00</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #0056b3;
+            margin-bottom: 20px;
+        }
+        #countdown {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #d9534f;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Mancano a Martedì Prossimo ore 21:00</h1>
+    <div id="countdown">Caricamento...</div>
+</div>
+
+<script>
+    function updateCountdown() {
+        // Data e ora correnti (del client)
+        const now = new Date();
+        
+        // Calcola la data e ora del prossimo martedì alle 21:00
+        const tuesday = new Date();
+        const daysUntilTuesday = (2 + 7 - now.getDay()) % 7; // Calcola i giorni rimanenti fino al prossimo martedì (2 = Martedì)
+        
+        // Se oggi è martedì e sono già passate le 21:00, aggiungi 7 giorni per il martedì successivo
+        if (now.getDay() === 2 && now.getHours() >= 21) {
+             tuesday.setDate(now.getDate() + 7);
+        } else {
+             tuesday.setDate(now.getDate() + daysUntilTuesday);
+        }
+        
+        tuesday.setHours(21, 0, 0, 0); // Imposta l'orario esatto alle 21:00:00
+
+        // Calcola la differenza in millisecondi
+        const timeDifference = tuesday.getTime() - now.getTime();
+
+        if (timeDifference < 0) {
+            document.getElementById('countdown').innerHTML = "L'evento è già iniziato!";
+            return;
+        }
+
+        // Calcoli per giorni, ore, minuti e secondi
+        const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+        // Formatta l'output
+        document.getElementById('countdown').innerHTML = 
+            `${days} giorni, ${hours} ore, ${minutes} minuti, ${seconds} secondi`;
+    }
+
+    // Aggiorna il contatore immediatamente e poi ogni secondo
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+</script>
+
+</body>
+</html>
